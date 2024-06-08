@@ -143,16 +143,22 @@
 %	PRESENTATION INFORMATION
 %----------------------------------------------------------------------------------------
 
-\title[Parallelizing LU Decomposition]{COL380 Assignment 1} % The short title in the optional parameter appears at the bottom of every slide, the full title in the main parameter is only on the title page
+\title[KU-STAR Research Internship]{KU-STAR Research Internship} % The short title in the optional parameter appears at the bottom of every slide, the full title in the main parameter is only on the title page
 
-\subtitle{A Study on Parallelizing LU Decomposition} % Presentation subtitle, remove this command if a subtitle isn't required
+\subtitle{} % Presentation subtitle, remove this command if a subtitle isn't required
 
 \author[Tejas]{Tejas Anand} % Presenter name(s), the optional parameter can contain a shortened version to appear on the bottom of every slide, while the main parameter will appear on the title slide
 
 
-\institute[IITD]{Indian Institute of Technology, Delhi \\ \smallskip \textit{}} % Your institution, the optional parameter can be used for the institution shorthand and will appear on the bottom of every slide after author names, while the required parameter is used on the title slide and can include your email address or additional information on separate lines
+\institute[IITD]{IIT Delhi \\ Kyoto University \smallskip \textit{}} % Your institution, the optional parameter can be used for the institution shorthand and will appear on the bottom of every slide after author names, while the required parameter is used on the title slide and can include your email address or additional information on separate lines
 
-\date[\today]{\today} % Presentation date or conference/meeting name, the optional parameter can contain a shortened version to appear on the bottom of every slide, while the required parameter value is output to the title slide
+\titlegraphic{
+	\includegraphics[width=3cm]{../fig/Indian_Institute_of_Technology_Delhi_Logo.svg.png}
+	\hspace{1cm}
+	\includegraphics[width=3cm]{../fig/Kyoto_University_emblem.svg.png}
+}
+% \date[\today]{\today} % Presentation date or conference/meeting name, the optional parameter can contain a shortened version to appear on the bottom of every slide, while the required parameter value is output to the title slide
+\date[5 June, 2024]{5 June, 2024}
 
 %----------------------------------------------------------------------------------------
 
@@ -202,32 +208,95 @@
 	\end{column}
 	% Column 2    
 	\begin{column}{0.325\textwidth}
-	%     \begin{figure}
-	%     \centering
-		% \includegraphics[width=0.7\textwidth]{Ques.png}
-		% \caption{A figure that is next to a certain explanation.}
-	%     \end{figure}
+	    \begin{figure}
+	    \centering
+		\includegraphics[width=\textwidth]{../fig/pres.png}
+	    \end{figure}
 	\end{column}
 \end{columns}
 	
+\end{frame}
+
 \subsection{Research Topic at Kyoto University}
+\begin{frame}
+	\frametitle{Research Topic at Kyoto University}
+Approximating the number of \textcolor{red}{\textbf{equivalence classes}} of a given relation.
+	\pause
+	\vspace{1cm}
+	\begin{center}
+	And how does it help? 
+	\end{center}
+	\pause
+	\vspace{1cm}
+
+	\begin{center}
+	Well, It helps in quantifying the sensitive \textcolor{red}{\textbf{information leaked}} by a computer program as \textcolor{red}{\textbf{entropy}}.
+	\end{center}
+
+
+
+\end{frame}
+	
+\begin{frame}
+	\frametitle{A question for the audience}
+	\textbf{Example}: How many equivalence classes does the following relation have, where $x,y$ are 32 bit integers ? 
+	\begin{equation}
+		x \sim y \Leftrightarrow x \equiv y \equiv 0 \mod 8 \textbf{ or } x = y
+	\end{equation}
+	\pause
+	\begin{center}
+		\textbf{Answer:} $7\cdot2^{29} + 1$. All of the multiples of 8 form 1 equivalence class, and the remaining $7/8^{ths}$ of the total $2^{32}$ integers form singleton equivalence classes of their own.
+	\end{center}
+	\pause
+	\begin{center}
+		$(x \equiv y \equiv 0 \mod 8) \vee (x = y) \rightarrow$ \fbox{\textbf{Our Algorithm}}  $\rightsquigarrow 7\cdot2^{29}$
+	\end{center}
+
+
 \end{frame}
 \begin{frame}
 	\frametitle{Research Topic at Kyoto University}
 	\begin{itemize}
 		\item Model counting is the problem of counting the number of solutions to a given set of constraints.
+		\item The problem of Model Counting (\#$\mathsf{SAT}$) is \#$\mathsf{P}$-complete.
+		\item Therefore, we work with an $(\epsilon,\delta)$ approximation algorithm $\mathcal{A}$, whose output $\mathsf{n}$ over a problem instance $\mathcal{F}$ satisfies,
+
+	\end{itemize}
+	\[
+		\Pr[\mathsf{n} \leftarrow \mathcal{A}(\mathcal{F}) :  \frac{\#\mathcal{F}}{1 + \epsilon} \leq \mathsf{n} \leq \#\mathcal{F}(1 + \epsilon)  ]	 \geq  1 - \delta
+	\]
+	\begin{itemize}
+		\item  In simple words, it gives a good enough number with high probability, for small values of $\epsilon$ and $\delta$.
 		\item For instance, we might want to count the number of equivalence classes of the given relation
 		\begin{equation}
-			x \sim y \Leftrightarrow x \equiv y \equiv 0 \mod 8
+			x \sim y \Leftrightarrow x \equiv y \equiv 0 \mod 8 \vee x = y
 		\end{equation}
-		\item Recently, a scalable algorithm for model counting over boolean constraints was propsed by Meel et al.
+	\end{itemize}
+\end{frame}
+\begin{frame}
+	\frametitle{Research Topic at Kyoto University}
+	\begin{itemize}
+		\item Recently, a scalable approximation algorithm for model counting over boolean constraints was propsed by Chakraborty et al.
 		\item We want to generalize this algorithm to simple arithmetic constraints like modulo, addition, subtraction, etc. over integers (finite fields like $Z_n$) and lists, using SMT solvers (SAT modulo theory) like Z3.
-		\item Applications include approximating the information lost as entropy by a given computer programme.
+		\item This has applications in computer security, it would be the main ingredient to quantify the sensitive information leaked by a computer programme.
 	\end{itemize}
 \end{frame}
 \subsection{Essential things for Kyoto University for research}
 \begin{frame}
 	\frametitle{Essential things at Kyoto University for research}
+	\begin{itemize}
+	\item One of the most important things for me that Kyoto University offers is the peaceful and serene environment, which in my opinion is essential for research.
+	\item I would also like to thank my Advisors Professor Kohei Suenaga and Atsushi Igarashi for hosting me and providing me with a wonderful topic to work on. 
+	\end{itemize}
+\end{frame}
+\subsection{Future Research Interests}
+\begin{frame}
+	\frametitle{Future Research Interests}
+	\begin{itemize}
+		\item Haven't yet decided on a specific area of research as of now.
+		\item For now, I would like to explore more by taking courses in different areas of computer science like verification, ML, systems etc.
+		\item This internship would be really helpful in helping me explore approximation algorithms.
+	\end{itemize}
 \end{frame}
 
 
@@ -235,7 +304,6 @@
 
 
 %------------------------------------------------
-\section{Parallelization}
 
 
 
@@ -465,6 +533,20 @@
 
 % %----------------------------------------------------------------------------------------
 % %	CLOSING SLIDE
+
+\subsection{Thank You}
+\begin{frame}
+	\frametitle{Thank You}
+	\begin{center}
+		\Huge Thank You for your Attention!
+	\end{center}
+	\vfill
+\begin{figure}
+    \includegraphics[width=0.4\textwidth]{../fig/Indian_Institute_of_Technology_Delhi_Logo.svg.png} % Replace with your logo
+    \hspace{1mm}
+    \includegraphics[width=0.4\textwidth]{../fig/Kyoto_University_emblem.svg.png} % Replace with your logo
+\end{figure}
+\end{frame}
 % %----------------------------------------------------------------------------------------
 
 
