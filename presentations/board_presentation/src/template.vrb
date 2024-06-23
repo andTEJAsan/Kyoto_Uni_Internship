@@ -1,0 +1,15 @@
+\frametitle{Parallelization strategies}
+
+	\begin{quote}
+		The overall performance improvement gained by optimizing a single part of a system is limited by the fraction of time that the improved part is actually used. \\
+		--- Amdahl's law \ldots
+	\end{quote}
+
+	\bigskip
+
+	Every loop inside of the main outermost loop can be parallelized as they process the data independently. But only one of those loops runs  $\mathcal{O}(n^3)$ times. So what we observed was that there wasn't any significant speedup without parallelizing that loop.
+
+	\bigskip
+
+	In this loop, we are subtracting the pivot row from the rows beneath it to make the entries below our diagonal equal to zero. 	
+
