@@ -1,0 +1,126 @@
+\documentclass{llncs} 
+\usepackage{llncsdoc} 
+\usepackage{enumerate}
+\usepackage{graphicx} 
+\usepackage{graphics, color}
+\usepackage{amsmath} 
+\usepackage{algorithm} 
+\usepackage{algorithmic}
+\usepackage{boxedminipage} 
+\usepackage{amssymb}
+\usepackage{verbatim}
+\usepackage{hyperref} 
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{changebar}
+\newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
+\newcommand{\BGP}{\ensuremath{\mathsf{BGP }}}
+\newcommand{\XORSample}{\ensuremath{\mathsf{XORSample }}}
+\newcommand{\XORSampleprime}{\ensuremath{\mathsf{XORSample}'}}
+\newcommand{\BoundedSAT}{\ensuremath{\mathsf{BoundedSAT}}}
+\newcommand{\ModelSAT}{\ensuremath{\mathsf{ModelSAT}}}
+\newcommand{\UniformWitness}{\ensuremath{\mathsf{UniWit}}}
+\newcommand{\UniGen}{\ensuremath{\mathsf{UniGen}}}
+\newcommand{\SATModelCount}{\ensuremath{\mathsf{SATModelCount}}}
+\newcommand{\killthis}[1]{}
+\newtheorem{conjencture}[theorem]{Conjencture}
+\newcommand{\prob}{\ensuremath{\mathsf{Pr}}}
+\newcommand{\expect}{\ensuremath{\mathsf{E}}}
+\newcommand{\var}{\ensuremath{\mathsf{V}}}
+\newcommand{\tab}{\hspace*{2em}}
+\newcommand{\mc}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\Relsat}{\ensuremath{\mathsf{Relsat}}}
+\newcommand{\NP}{\ensuremath{\mathsf{NP}}}
+\newcommand{\SAT}{\ensuremath{\mathsf{SAT}}}
+\newcommand{\sharpSATTool}{\ensuremath{\mathsf{sharpSAT}}}
+\newcommand{\Cachet}{\ensuremath{\mathsf{Cachet}}}
+\newcommand{\ApproxCount}{\ensuremath{\mathsf{ApproxCount}}}
+\newcommand{\SampleMinisat}{\ensuremath{\mathsf{SampleMinisat}}}
+\newcommand{\SampleCount}{\ensuremath{\mathsf{SampleCount}}}
+\newcommand{\BPCount}{\ensuremath{\mathsf{BPCount}}}
+\newcommand{\MBound}{\ensuremath{\mathsf{MBound}}}
+\newcommand{\CDP}{\ensuremath{\mathsf{CDP}}}
+\newcommand{\HybridMBound}{\ensuremath{\mathsf{Hybrid}}-\ensuremath{\mathsf{MBound}}}
+\newcommand{\UniWitRange}{\ensuremath{\mathsf{UniWitRange}}}
+\newcommand{\UniModelCount}{\ensuremath{\mathsf{UniModelCount}}}
+\newcommand{\MiniSAT}{\ensuremath{\mathsf{MiniSAT}}}
+\newcommand{\MiniCount}{\ensuremath{\mathsf{MiniCount}}}
+\newcommand{\sharpSAT}{\ensuremath{\#\mathsf{SAT}}}
+\newcommand{\sharpP}{\ensuremath{\#\mathsf{P}}}
+\newcommand{\approxMC}{\ensuremath{\mathsf{ApproxMC}}}
+\newcommand{\ApproxMC}{\ensuremath{\mathsf{ApproxMC}}}
+\newcommand{\ApproxMCCore}{\ensuremath{\mathsf{ApproxMCCore}}}
+\newcommand{\ComputeThreshold}{\ensuremath{\mathsf{ComputeThreshold}}}
+\newcommand{\ComputeIterCount}{\ensuremath{\mathsf{ComputeIterCount}}}
+\newcommand{\SearchTreeSampler}{\ensuremath{\mathsf{SearchTreeSampler}}}
+\newcommand{\SE}{\ensuremath{\mathsf{SE}}}
+\newcommand{\SampleSearch}{\ensuremath{\mathsf{SampleSearch}}}
+\newcommand{\JVV}{\ensuremath{\mathsf{JVV}}}
+\newcommand{\addedfragile}[1]{{\color{purple!50!black}{#1}}{}}
+%
+\newcommand{\added}[1]{#1}
+
+%
+%
+%
+
+\begin{document}
+\makeatletter
+\renewcommand*{\@fnsymbol}[1]{\ensuremath{\ifcase#1\or *\or \dagger\or \ddagger\or
+   \mathsection\or \mathparagraph\or \|\or **\or \dagger\dagger
+   \or \ddagger\ddagger \else\@ctrerr\fi}}
+\makeatother
+\title{A Scalable Approximate Model Counter\thanks{Authors would like to thank Henry Kautz and  Ashish Sabhrawal for their valuable help in experiments, and  Tracy Volz for valuable comments on the earlier drafts.  Work supported in part by NSF grants CNS 1049862 and CCF-1139011,
+by NSF Expeditions in Computing project ``ExCAPE: Expeditions in Computer
+Augmented Program Engineering," by BSF grant 9800096, by a gift from
+Intel, by a grant from Board of Research in Nuclear Sciences, India, and by the Shared University Grid at Rice funded by NSF under Grant EIA-0216467, and a partnership between Rice University, Sun Microsystems, and Sigma Solutions, Inc.
+} \thanks{A longer version of this paper is available at \url{http://www.cs.rice.edu/CS/Verification/Projects/ApproxMC/}}}
+\author{Supratik Chakraborty\inst{1} \and Kuldeep S. Meel\inst{2} \and Moshe Y. Vardi\inst{2}}
+\institute{Indian Institute of Technology Bombay, India
+\and
+Department of Computer Science, Rice University}
+\date{Jan.~29, 2013}
+
+\maketitle
+\begin{abstract}
+\emph{Propositional model counting} ({\sharpSAT}), i.e., counting the
+number of satisfying assignments of a propositional formula, is a
+problem of significant theoretical and practical interest.  Due to the
+inherent complexity of the problem, \emph{approximate model counting},
+which counts the number of satisfying assignments to within given
+tolerance and confidence level, was proposed as a practical
+alternative to exact model counting. Yet, approximate model counting
+has been studied essentially only theoretically.  The only reported
+implementation of approximate model counting, due to Karp and Luby,
+worked only for DNF formulas.  A few existing tools for CNF formulas
+are \emph{bounding model counters}; they can handle realistic problem
+sizes, but fall short of providing counts within given tolerance and
+confidence, and, thus, are not approximate model counters.
+
+We present here a novel algorithm, as well as a reference implementation,
+that is the first scalable approximate model counter for CNF formulas.
+The algorithm works by issuing a polynomial number of calls to a
+SAT solver. Our tool, {\approxMC}, scales to formulas with tens of thousands of 
+variables.  Careful experimental comparisons show that {\approxMC}
+reports, with high confidence, bounds that are close to the exact count,
+and also succeeds in reporting bounds with small tolerance
+and high confidence in cases that are too large for computing exact
+model counts.
+\end{abstract}
+
+\input{Intro}
+\input{Prelim}
+\input{RelatedWork}
+\input{Algo}
+\input{Analysis}
+\input{Experiments}
+\input{Results}
+\input{Conclusion}
+\clearpage
+\bibliography{Report}
+\bibliographystyle{plain}  
+\clearpage
+%
+\end{document}

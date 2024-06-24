@@ -1,0 +1,188 @@
+\section{Algorithm} \label{sec:algo}
+We now describe our approximate model counting algorithm, called
+{\ApproxMC}.  %
+%
+%
+%
+As mentioned above, we use $3$-wise independent linear hashing
+functions from the $H_{xor}(n, m, 3)$ family, for an appropriate $m$,
+to randomly partition the set of models of an input formula into
+``small'' cells.  In order to test whether the generated cells are
+indeed small, we choose a random cell and check if it is non-empty and
+has no more than $pivot$ elements, where $pivot$ is a threshold that
+depends only on the tolerance bound $\varepsilon$.  If the chosen cell
+is not small, we randomly partition the set of models into twice as
+many cells as before by choosing a random hashing function from the
+family $H_{xor}(n, m+1, 3)$.
+%
+%
+%
+The above procedure is repeated until either a randomly
+chosen cell is found to be non-empty and small, or the number of
+cells exceeds $\frac{2^{n+1}}{\mathit{pivot}}$.  If all cells
+that were randomly chosen during the above process were either empty
+or not small, we report a counting failure and return $\bot$.
+Otherwise, the size of the cell last chosen is scaled by the number
+of cells to obtain an $\varepsilon$-approximate estimate of the model count.  
+
+The procedure outlined above forms the core engine of {\ApproxMC}. For
+convenience of exposition, we implement this core engine as a function
+{\ApproxMCCore}.  The overall {\ApproxMC} algorithm simply invokes
+{\ApproxMCCore} sufficiently many times, and returns the median of the
+non-$\bot$ values returned by {\ApproxMCCore}.  The pseudocode for
+algorithm {\ApproxMC} is shown below.
+
+\begin{tabular}{lccl}
+\begin{minipage}{0.5\textwidth}
+\begin{tabbing}	
+xx \= xx \= xx \= xx \= xx \= \kill
+\\
+\noindent {\bfseries \textsf{Algorithm} ${\approxMC} (F, \varepsilon,\delta)$}\\
+1:\> $\mathit{counter} \leftarrow 0; C \leftarrow \mathsf{emptyList}$;\\
+%
+2:\> $\mathit{pivot} \leftarrow 2 \times {\ComputeThreshold}(\varepsilon)$; \\
+3:\> $t \leftarrow  {\ComputeIterCount}(\delta)$;\\
+4:\> {\bfseries repeat}:\\
+5:\> \> $c \leftarrow {\ApproxMCCore} (F, \mathit{pivot})$;\\
+6:\> \> $\mathit{counter} \leftarrow \mathit{counter}+1$;\\
+7:\> \> {\bfseries if} $(c \neq \bot)$ \\
+8:\> \> \>$\mathsf{AddToList}(C, c)$;\\
+9:\> {\bfseries until} ($\mathit{counter} < t$);\\
+10:\> $\mathit{finalCount} \leftarrow \mathsf{FindMedian}(C)$;\\
+11:\>{\bfseries return} $\mathit{finalCount}$; \\ 
+\end{tabbing} 
+\end{minipage} & & &
+\begin{minipage}{0.5\textwidth}
+\begin{tabbing}	
+xx \= xx \= xx \= xx \= xx \= \kill
+\\
+\noindent {\bfseries \textsf{Algorithm} ${\ComputeThreshold} (\varepsilon)$}\\
+1:\> {\bfseries return} $\left\lceil 3e^{1/2}\left(1 + \frac{1}{\varepsilon}\right)^2 \right\rceil$;\\
+\\
+\\
+\noindent {\bfseries \textsf{Algorithm} ${\ComputeIterCount} (\delta)$}\\
+1:\> {\bfseries return} $\left\lceil 35\log_2 (3/\delta) \right\rceil$;\\
+\\
+\\
+\\
+\\
+\\
+\end{tabbing}
+\end{minipage}\\
+\end{tabular}
+
+\noindent
+Algorithm {\ApproxMC} takes as inputs a CNF formula $F$, a tolerance
+$\varepsilon ~(0 < \varepsilon \le 1)$ and $\delta ~(0 < \delta \le
+1)$ such that the desired confidence is $1-\delta$.  It computes two
+key parameters: (i) a threshold $\mathit{pivot}$ that depends only on
+$\varepsilon$ and is used in {\ApproxMCCore} to determine the size of
+a ``small'' cell, and (ii) a parameter $t ~(\ge 1)$ that depends only
+on $\delta$ and is used to determine the number of times
+{\ApproxMCCore} is invoked. The particular choice of functions to
+compute the parameters $\mathit{pivot}$ and $t$ aids us in proving
+theoretical guarantees for {\ApproxMC} in Section
+\ref{sec:analysis}. Note that $\mathit{pivot}$ is in
+$\mathcal{O}(1/\varepsilon^2)$ and $t$ is in $\mathcal{O}(\log_2 (1/\delta))$.  All non-$\bot$
+estimates of the model count returned by {\ApproxMCCore} are stored in
+the list $C$.  The function $\mathsf{AddToList}(C, c)$ updates the
+list $C$ by adding the element $c$.  The final estimate of the model
+count returned by {\ApproxMC} is the median of the estimates stored in
+$C$, computed using $\mathsf{FindMedian}(C)$.  We assume that if the list $C$ is
+empty, $\mathsf{FindMedian}(C)$ returns $\bot$.
+%
+%
+
+The pseudocode for algorithm {\ApproxMCCore} is shown below.
+\begin{tabbing} xx \= xx \= xx \= xx \= xx \= \kill
+\noindent {\bfseries \textsf{Algorithm} ${\ApproxMCCore} (F, pivot)$}\\ 
+/* Assume $z_1, \ldots z_n$ are the variables of $F$    */ \\
+%
+1:\> $S \leftarrow \BoundedSAT(F, \mathit{pivot} +1)$;\\
+2:\> {\bfseries if} ($|S| \le \mathit{pivot}$)\\
+3:\> \> return $|S|$; \\
+4:\> {\bfseries else} \\
+%
+5:\> \> $l \leftarrow \lfloor \log_2 (\mathit{pivot}) \rfloor - 1$; $i \leftarrow l - 1$;\\
+6:\> \> {\bfseries repeat}\\
+7:\> \> \> $i \leftarrow i+1$;\\
+8:\> \> \> Choose $h$ at random from $H_{xor}(n, i-l, 3)$; \\
+9:\> \> \> Choose $\alpha$ at random from $\{0, 1\}^{i-l}$;\\
+10:\> \> \> $S \leftarrow \BoundedSAT(F \wedge (h(z_1, \ldots z_n) = \alpha), \mathit{pivot}+1)$;\\
+11:\> \> {\bfseries until} ($1 \le |S| \le \mathit{pivot}$) or ($i = n$);\\
+12:\> \> {\bfseries if} ($|S| > \mathit{pivot}$ {\bfseries or} $|S| = 0$) {\bfseries return} $\bot$  ;\\
+13:\> \> {\bfseries else return }  $|S| \cdot 2^{i-l}$;\\
+\end{tabbing}
+Algorithm {\ApproxMCCore} takes as inputs a CNF formula $F$ and a
+threshold $pivot$, and returns an $\varepsilon$-approximate estimate
+of the model count of $F$.  We assume that {\ApproxMCCore} has access
+to a function {\BoundedSAT} that takes as inputs a proposition formula
+$F'$ that is the conjunction of a CNF formula and xor constraints, as
+well as a threshold \added{$v \ge 0$.  {\BoundedSAT}$(F', v)$} returns
+a set $S$ of models of $F'$ such that $|S| = \min(\added{v}, \#F')$.
+If the model count of $F$ is no larger than $\mathit{pivot}$, then
+{\ApproxMCCore} returns the exact model count of $F$ in line $3$ of
+the pseudocode.  Otherwise, it partitions the space of all models of
+$F$ using random hashing functions from $H_{xor}(n, i-l, 3)$ and
+checks if a randomly chosen cell is non-empty and has at most
+$\mathit{pivot}$ elements.  Lines $8$--$10$ of the repeat-until loop
+in the pseudocode implement this functionality.  The loop terminates
+if either a randomly chosen cell is found to be small and non-empty,
+or if the number of cells generated exceeds
+$\frac{2^{n+1}}{\mathit{pivot}}$ (if $i=n$ in line $11$, the number of
+cells generated is $2^{n-l} \ge \frac{2^{n+1}}{\mathit{pivot}}$).  In
+all cases, unless the cell that was chosen last is empty or not small,
+we scale its size by the number of cells generated by the
+corresponding hashing function to compute an estimate of the model
+count.  If, however, all randomly chosen cells turn out to be empty or
+not small, we report a counting error by returning $\bot$.
+
+\noindent 
+{\bfseries Implementation issues:} There are two steps in
+algorithm {\ApproxMCCore} (lines 8 and 9 of the pseudocode) where
+random choices are made.  Recall from
+Section~\ref{sec:prelims} that choosing a random hash
+function from $H_{xor}(n, m, 3)$ requires choosing random
+bit-vectors.  It is straightforward to implement these
+choices and also the choice of a random $\alpha \in \{0, 1\}^{i-l}$ 
+in line 9 of the pseudocode, if we have access to
+a source of independent and uniformly distributed random bits.  
+%
+%
+%
+%
+%
+%
+Our implementation uses pseudo-random sequences of bits generated from
+nuclear decay processes and made available at HotBits~\cite{HotBits}.
+We download and store a sufficiently long sequence of random bits in a
+file, and access an appropriate number of bits sequentially whenever
+needed. We defer experimenting with sequences of bits obtained from
+other pseudo-random generators to a future study.
+
+In lines 1 and 10 of the pseudocode for algorithm {\ApproxMCCore}, we
+invoke the function {\BoundedSAT}.  Note that if $h$ is chosen
+randomly from $H_{xor}(n, m, 3)$, the formula for which we seek models
+is the conjunction of the original (CNF) formula and xor constraints
+encoding the inclusion of each witness in $h^{-1}(\alpha)$.  We
+therefore use a SAT solver optimized for conjunctions of xor
+constraints and CNF clauses as the back-end engine.  Specifically, we
+use CryptoMiniSAT (version 2.9.2)~\cite{CryptoMiniSAT}, which also
+allows passing a parameter indicating the maximum number of witnesses
+to be generated.
+
+Recall that {\ApproxMCCore} is invoked $t$ times with the same
+arguments in algorithm {\ApproxMC}.  Repeating the loop of lines 6--11
+in the pseudocode of {\ApproxMCCore} in each invocation can be time
+consuming if the values of $i-l$ for which the loop terminates are
+large.  In~\cite{SKV13}, a heuristic called \emph{leap-frogging} was
+proposed to overcome this bottleneck in practice.  With leap-frogging,
+we register the smallest value of $i-l$ for which the loop terminates
+during the first few invocations of {\ApproxMCCore}.  In all
+subsequent invocations of {\ApproxMCCore} with the same arguments, we
+start iterating the loop of lines 6--11 by initializing $i-l$ to the
+smallest value registered from earlier invocations.  Our experiments
+indicate that leap-frogging is extremely efficient in practice and
+leads to significant savings in time after the first few invocations
+of {\ApproxMCCore}. \added{A theoretical analysis of leapfrogging is
+  deferred to future work.}

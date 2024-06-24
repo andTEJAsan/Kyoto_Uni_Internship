@@ -1,0 +1,305 @@
+\section{Analysis of {\ApproxMC}}\label{sec:analysis}
+%
+%
+%
+
+The following result, a minor variation of Theorem~5 
+in~\cite{Schmidt}, about Chernoff-Hoeffding bounds plays an important
+role in our analysis.
+\begin{theorem}\label{theorem:chernoff-hoeffding}
+Let $\Gamma$ be the sum of $r$-wise independent random variables, each
+of which is confined to the interval $[0, 1]$, and suppose
+$\expect[\Gamma] = \mu$.  For $0 < \beta \le 1$, if $r \le \left\lfloor
+\beta^{2}\mu e^{-1/2} \right\rfloor \leq 4$ , then $\prob\left[\,|\Gamma - \mu| \ge
+  \beta\mu\,\right] \le e^{-r/2}$.
+\end{theorem}
+
+Let $F$ be a CNF propositional formula with $n$ variables. The next
+two lemmas show that algorithm {\ApproxMCCore}, when invoked from
+{\ApproxMC} with arguments $F$, $\varepsilon$ and $\delta$, behaves
+like an $(\varepsilon, d)$ model counter for $F$, for a fixed confidence
+$1-d$ (possibly different from $1-\delta$).  Throughout this
+section, we use the notations $R_F$ and $R_{F,h,\alpha}$ introduced in
+Section~\ref{sec:prelims}.
+
+\begin{lemma}\label{lm:probProof}
+ Let algorithm {\ApproxMCCore}, when invoked from {\ApproxMC}, return
+ $c$ with $i$ being the final value of the loop counter in {\ApproxMCCore}.  
+Then, $\prob\left[(1 + \varepsilon)^{-1}\cdot |R_F| \le c \le (1 +
+   \varepsilon)\cdot |R_F| \Bigm|  c \neq \bot \mbox{ and } i \leq \log_2 |R_F|\right]$ $\ge 1 - e^{-3/2}$.
+\end{lemma}
+\begin{proof}
+Referring to the pseudocode of {\ApproxMCCore}, the lemma is trivially
+satisfied if $|R_F| \le \mathit{pivot}$.  Therefore, the only
+non-trivial case to consider is when $|R_F| > \mathit{pivot}$ and
+{\ApproxMCCore} returns from line $13$ of the pseudocode.  In this
+case, the count returned is $2^{i-l}.|R_{F,h,\alpha}|$, where $l =
+\lfloor \log_2 (\mathit{pivot}) \rfloor - 1$ and $\alpha, i$ and $h$
+denote (with abuse of notation) the values of the corresponding
+variables and hash functions in the final iteration of the
+repeat-until loop in lines $6$--$11$ of the pseudocode.  
+
+For simplicity of exposition, we assume henceforth that $\log_2
+(\mathit{pivot})$ is an integer.  A more careful analysis removes this
+restriction with only a constant factor scaling of the probabilities.
+From the pseudocode of {\ApproxMCCore}, we know that
+$\mathit{pivot} =2 \left\lceil 3e^{1/2}\left(1 +
+\frac{1}{\varepsilon}\right)^2 \right\rceil$.  
+
+Furthermore, the value of $i$ is always in $\{l, \ldots n\}$.  Since
+$\mathit{pivot} < |R_F| \le 2^n$ and $l = \lfloor \log_2
+\mathit{pivot} \rfloor - 1$, we have $l < \log_2 |R_F| \le n$.  The
+lemma is now proved by showing that for every $i$ in $\{l, \ldots
+\lfloor \log_2 |R_F| \rfloor\}$, $h \in H(n, i-l, 3)$ and $\alpha \in
+\{0,1\}^{i-l}$, we have $\prob\left[(1 + \varepsilon)^{-1}\cdot |R_F|
+  \le 2^{i-l}|R_{F,h,\alpha}|\right.$ $\left.\le (1 +
+  \varepsilon)\cdot |R_F|\right]$ $\ge (1 - e^{-3/2})$.
+
+For every $y \in \{0, 1\}^n$ and for every $\alpha \in \{0,
+1\}^{i-l}$, define an indicator variable $\gamma_{y, \alpha}$ as
+follows: $\gamma_{y, \alpha} = 1$ if $h(y) = \alpha$, and
+$\gamma_{y,\alpha} = 0$ otherwise.  Let us fix $\alpha$ and $y$ and
+choose $h$ uniformly at random from $H(n, i-l, 3)$.  The random choice
+of $h$ induces a probability distribution on $\gamma_{y, \alpha}$,
+such that $\prob\left[\gamma_{y, \alpha} = 1\right] = \prob\left[h(y)
+  = \alpha\right] = 2^{-(i-l)}$, and
+$\expect\left[\gamma_{y,\alpha}\right] = \prob\left[\gamma_{y, \alpha}
+  = 1\right] = 2^{-(i-l)}$.  In addition, the $3$-wise independence of
+hash functions chosen from $H(n, i-l, 3)$ implies that for every
+distinct $y_a, y_b, y_c \in R_F$, the random variables $\gamma_{y_a,
+  \alpha}$, $\gamma_{y_b, \alpha}$ and $\gamma_{y_c, \alpha}$ are
+$3$-wise independent.
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
+Let $\Gamma_\alpha = \sum_{y \in R_F} \gamma_{y, \alpha}$ and
+$\mu_\alpha = \expect\left[\Gamma_\alpha\right]$.  Clearly,
+$\Gamma_\alpha = |R_{F, h, \alpha}|$ and $\mu_\alpha = \sum_{y \in
+  R_F} \expect\left[\gamma_{y, \alpha}\right] = 2^{-(i-l)}|R_F|$.
+Since $|R_F| > \mathit{pivot}$ and $i \leq \log_2 |R_F|$, using the expression for
+$\mathit{pivot}$, we get $3 \le \left\lfloor e^{-1/2}(1 +
+\frac{1}{\varepsilon})^{-2}\cdot\frac{|R_F|}{2^{i-l}}
+\right\rfloor$. Therefore, using Theorem
+\ref{theorem:chernoff-hoeffding},
+$\prob\left[|R_F|.\left(1-\frac{\varepsilon}{1+\varepsilon}\right) \leq
+  2^{i-l}|R_{F,h,\alpha}|\right.$ $\left.\leq
+  (1+\frac{\varepsilon}{1+\varepsilon})|R_F|\right] \ge 1- e^{-3/2}$.
+ Simplifying and noting that $\frac{\varepsilon}{1+\varepsilon} <
+\varepsilon$ for all $\varepsilon > 0$, we obtain
+$\prob\left[(1+\varepsilon)^{-1}\cdot |R_F| \leq \right.$ $\left. 
+  2^{i-l}|R_{F,h,\alpha}|\leq (1+ \varepsilon)\cdot |R_F| \right] \ge 1- e^{-3/2}$.
+\end{proof}
+
+\begin{lemma}\label{lm:nonbotProb}
+Given $|R_F| > \mathit{pivot}$, the probability that an invocation of
+{\ApproxMCCore} from {\ApproxMC} returns non-$\bot$ with $i \le \log_2
+|R_F|$, is at least $1-e^{-3/2}$.
+\end{lemma}
+\begin{proof}
+Let us denote $\log_2 |R_F| - l$ $=$ $\log_2 |R_F| -
+(\left\lfloor\log_2 (\mathit{pivot}) \right\rfloor - 1)$ by $m$.  
+Since $|R_F| > \mathit{pivot}$ and $|R_F| \le 2^n$, we have $l < m+l \le n$.
+%
+%
+%
+%
+%
+Let $p_i~(l \le i \le n)$ denote the conditional probability that
+{\ApproxMCCore}$(F, \mathit{pivot})$ terminates in iteration $i$ of
+the repeat-until loop (lines $6$--$11$ of the pseudocode) with $1 \le
+|R_{F,h,\alpha}| \le \mathit{pivot}$, given $|R_F| > \mathit{pivot}$.
+Since the choice of $h$ and $\alpha$ in each iteration of the loop are
+independent of those in previous iterations, the conditional
+probability that {\ApproxMCCore}$(F, \mathit{pivot})$ returns
+non-$\bot$ with $i \le \log_2 |R_F| = m+l$, given $|R_F| >
+\mathit{pivot}$, is $p_l + (1-p_l)p_{l+1}$ $+ \cdots +
+(1-p_l)(1-p_{l+1})\cdots(1-p_{m+l-1})p_{m+l}$. Let us denote this sum
+by $P$.  Thus, $P = p_l + \sum_{i=l+1}^{m+l} \prod_{k=l}^{i-1}
+(1-p_k)p_i$ $\,\ge\, \left(p_l + \sum_{i=l+1}^{m+l-1}
+\prod_{k=l}^{i-1} (1-p_k)p_i\right)p_{m+l}$ $+$ $\prod_{s=l}^{m+l-1}
+(1-p_s)p_{m+l}$ $= p_{m+l}$.  The lemma is now proved by using
+Theorem~\ref{theorem:chernoff-hoeffding} to show that $p_{m+l} \ge
+1-e^{-3/2}$.
+
+It was shown in Lemma~\ref{theorem:chernoff-hoeffding} that
+$\prob\left[(1+\varepsilon)^{-1}\cdot |R_F| \leq
+  2^{i-l}|R_{F,h,\alpha}|\right.$ $\left.\leq (1+ \varepsilon)\cdot
+  |R_F| \right] \ge 1- e^{-3/2}$ for every $i \in \{l, \ldots \lfloor \log_2
+|R_F| \rfloor\}$, $h \in H(n, i-l, 3)$ and $\alpha \in \{0,1\}^{i-l}$.
+Substituting $\log_2 |R_F| = m+l$ for $i$, re-arranging terms and
+noting that the definition of $m$ implies $2^{-m}|R_F| =
+\mathit{pivot}/2$, we get
+$\prob\left[(1+\varepsilon)^{-1}(\mathit{pivot}/2)\right.$
+  $\left. \leq |R_{F,h,\alpha}|\right.$ $\left.\leq (1+
+  \varepsilon)(\mathit{pivot}/2) \right] \ge 1- e^{-3/2}$.  Since $0 <
+\varepsilon \le 1$ and $\mathit{pivot} > 4$, it follows that
+$\prob\left[1 \le |R_{F,h,\alpha}| \le \mathit{pivot}\right]$ $\ge$
+$1-e^{-3/2}$.  Hence, $p_{m+l} \ge 1-e^{-3/2}$.
+\end{proof}
+
+\begin{theorem}\label{thm:almost-approx}
+Let an invocation of {\ApproxMCCore} from {\ApproxMC} return $c$. Then
+$\prob\left[c \neq \bot \mbox{ and } (1 + \varepsilon)^{-1}\cdot |R_F| \le c
+  \le (1 + \varepsilon)\cdot |R_F|\right]$ $\ge (1 - e^{-3/2})^2 > 0.6$.
+\end{theorem}
+\noindent \emph{Proof sketch:} It is easy to see that the required
+probability is at least as large as $\prob\left[c \neq \bot \mbox{ and
+  } i \leq \log_2|R_F| \mbox{ and } (1 + \varepsilon)^{-1}\cdot |R_F|
+  \le c \le (1 + \varepsilon)\cdot |R_F|\right]$. From
+Lemmas~\ref{lm:probProof} and \ref{lm:nonbotProb}, the latter
+probability is $\ge (1 - e^{-3/2})^2$.
+
+We now turn to proving that the confidence can be raised to at least
+$1-\delta$ for $\delta \in (0, 1]$ by invoking {\ApproxMCCore}
+$\mathcal{O}(\log_2(1/\delta))$ times, and by using the median of the
+non-$\bot$ counts thus returned.  For convenience of exposition, we
+use $\eta(t, m, p)$ in the following discussion to denote the
+probability of at least $m$ heads in $t$ independent tosses of a
+biased coin with $\prob\left[\mathit{heads}\right] = p$.  Clearly, 
+$\eta(t, m, p) = \sum_{k=m}^{t} \binom{t}{k} p^{k} (1-p)^{t-k}$.
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
+\begin{theorem} \label{theorem:approx}
+Given a propositional formula $F$ and parameters $\varepsilon ~(0 <
+\varepsilon \le 1)$ and $\delta ~(0 < \delta \le
+1)$, suppose {\ApproxMC}$(F, \varepsilon, \delta)$ returns $c$.  Then
+$\prob\left[{\left(1+\varepsilon\right)}^{-1}\cdot |R_F| \le c \right.$ $\left.\le
+  (1+\varepsilon)\cdot |R_F|\right]$ $\ge 1-\delta$.
+%
+%
+\end{theorem}
+\begin{proof}
+Throughout this proof, we assume that {\ApproxMCCore} is invoked $t$
+times from {\ApproxMC}, where $t = \left\lceil 35\log_2 (3/\delta)
+\right\rceil$ (see pseudocode for {\ComputeIterCount} in
+Section~\ref{sec:algo}).  Referring to the pseudocode of {\ApproxMC},
+the final count returned by {\ApproxMC} is the median of non-$\bot$
+counts obtained from the $t$ invocations of {\ApproxMCCore}.  Let
+$Err$ denote the event that the median is not in
+$\left[(1+\varepsilon)^{-1}\cdot |R_F|, (1+\varepsilon)\cdot |R_F|\right]$.  Let
+``$\#\mathit{non }\bot = q$'' denote the event that $q$ (out of $t$)
+values returned by {\ApproxMCCore} are non-$\bot$.  Then,
+$\prob\left[Err\right]$ $=$ $\sum_{q=0}^t \prob\left[Err \mid
+  \#\mathit{non }\bot = q\right]$ $\cdot$
+$\prob\left[\#\mathit{non }\bot = q\right]$.
+
+In order to obtain $\prob\left[Err \mid \#\mathit{non }\bot =
+  q\right]$, we define a $0$-$1$ random variable $Z_i$, for $1 \le i
+\le t$, as follows.  If the $i^{th}$ invocation of {\ApproxMCCore}
+returns $c$, and if $c$ is either $\bot$ or a non-$\bot$ value that
+does not lie in the interval $[(1+\varepsilon)^{-1}\cdot |R_F|,
+  (1+\varepsilon)\cdot |R_F|]$, we set $Z_i$ to 1; otherwise, we set
+it to $0$.  From Theorem~\ref{thm:almost-approx}, $\prob\left[Z_i =
+  1\right] = p < 0.4$.  If $Z$ denotes $\sum_{i=1}^t Z_i$, a necessary
+(but not sufficient) condition for event $Err$ to occur, given that
+$q$ non-$\bot$s were returned by {\ApproxMCCore}, is $Z \ge
+(t-q+\lceil q/2\rceil)$.  To see why this is so, note that $t-q$
+invocations of {\ApproxMCCore} must return $\bot$.  In addition, at
+least $\lceil q/2 \rceil$ of the remaining $q$ invocations must return
+values outside the desired interval. To simplify the exposition, let
+$q$ be an even integer.  A more careful analysis removes this
+restriction and results in an additional constant scaling factor for
+$\prob\left[Err\right]$.  With our simplifying assumption,
+$\prob\left[Err \mid \#\mathit{non }\bot = q\right] \le \prob[Z \ge (t
+  - q + q/2)]$ $=\eta(t, t-q/2, p)$.  Since $\eta(t, m, p)$ is a
+decreasing function of $m$ and since $q/2 \le t-q/2 \le t$, we have
+$\prob\left[Err \mid \#\mathit{non }\bot = q\right] \le \eta(t, t/2,
+p)$.  If $p < 1/2$, it is easy to verify that $\eta(t, t/2, p)$ is an
+increasing function of $p$.  In our case, $p < 0.4$; hence,
+$\prob\left[Err \mid \#\mathit{non }\bot = q\right] \le \eta(t, t/2,
+0.4)$.
+
+It follows from above that $\prob\left[ Err \right]$ $=$
+$\sum_{q=0}^t$ $\prob\left[Err \mid \#\mathit{non }\bot = q\right]$
+$\cdot\prob\left[\#\mathit{non }\bot = q\right]$ $\le$ $\eta(t, t/2,
+0.4)\cdot$ $\sum_{q=0}^t \prob\left[\#\mathit{non }\bot = q\right]$
+$=$ $\eta(t, t/2, 0.4)$.  Since $\binom{t}{t/2} \ge \binom{t}{k}$ for
+all $t/2 \le k \le t$, and since $\binom{t}{t/2} \le 2^t$, we have
+$\eta(t, t/2, 0.4)$ $=$ $\sum_{k=t/2}^{t} \binom{t}{k} (0.4)^{k}
+(0.6)^{t-k}$ $\le$ $\binom{t}{t/2} \sum_{k=t/2}^t (0.4)^k (0.6)^{t-k}$
+\added{$\le 2^t \sum_{k=t/2}^t (0.6)^t (0.4/0.6)^{k}$}$\le 2^t \cdot 3 \cdot (0.6 \times 0.4)^{t/2}$ $\le 3\cdot(0.98)^t$.
+Since $t = \left\lceil 35\log_2 (3/\delta) \right\rceil$, it follows
+that $\prob\left[Err\right] \le \delta$.
+\end{proof}
+
+%
+%
+%
+\begin{theorem} \label{th:complexity}
+Given an oracle for {\SAT}, {\ApproxMC}$(F, \varepsilon, \delta)$
+%
+%
+runs in time polynomial in $\log_2(1/\delta), |F|$ and
+$1/\varepsilon$ relative to the oracle.
+%
+%
+\end{theorem}
+\begin{proof}
+Referring to the pseudocode for {\ApproxMC}, lines $1$--$3$ take time
+no more than a polynomial in $\log_2(1/\delta)$ and $1/\varepsilon$.
+The repeat-until loop in lines $4$--$9$ is repeated $t = \left\lceil
+35\log_2(3/\delta)\right\rceil$ times. The time taken for each
+iteration is dominated by the time taken by {\ApproxMCCore}.  Finally,
+computing the median in line $10$ takes time linear in $t$.  The proof
+is therefore completed by showing that {\ApproxMCCore} takes time
+polynomial in $|F|$ and $1/\varepsilon$ relative to the {\SAT} oracle.
+
+Referring to the pseudocode for {\ApproxMCCore}, we find that
+{\BoundedSAT} is called $\mathcal{O}(|F|)$ times.  Each such call can
+be implemented by at most $\mathit{pivot}+1$ calls to a {\SAT} oracle,
+and takes time polynomial in $|F|$ and $\mathit{pivot}+1$ relative to
+the oracle.  Since $\mathit{pivot}+1$ is in
+$\mathcal{O}(1/\varepsilon^2)$, the number of calls to the {\SAT}
+oracle, and the total time taken by all calls to {\BoundedSAT} in each
+invocation of {\ApproxMCCore} is a polynomial in $|F|$ and
+$1/\varepsilon$ relative to the oracle.  The random choices in lines 8
+and 9 of {\ApproxMCCore} can be implemented in time polynomial in $n$
+(hence, in $|F|$) if we have access to a source of random bits.
+Constructing $F \wedge h(z_1, \ldots z_n) = \alpha$ in line 10 can
+also be done in time polynomial in $|F|$.
+  %
+%
+%
+\end{proof}

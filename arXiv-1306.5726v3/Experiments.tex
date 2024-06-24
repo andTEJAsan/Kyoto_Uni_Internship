@@ -1,0 +1,134 @@
+\section{Experimental Methodology}
+\label{sec:experiment}
+To evaluate the performance and quality of results of {\ApproxMC}, we
+built a prototype implementation and conducted an extensive set of
+experiments. The suite of benchmarks represent problems from practical domains as well as problems of theoretical interest. In particular, we considered a wide range of model counting benchmarks
+from different domains including grid networks, plan recognition, DQMR networks, Langford sequences, circuit
+synthesis, random $k$-CNF and logistics problems ~\cite{SangBearKautz2005,KrocSabSel2008}. The suite consisted of benchmarks ranging from 32 variables to 229100 variables in CNF representation. The complete set of benchmarks (numbering
+above $200$) is available at \url{http://www.cs.rice.edu/CS/Verification/Projects/ApproxMC/}.  
+
+All our experiments were conducted on a high-performance computing
+cluster.  Each individual experiment was run on a single node of the
+cluster; the cluster allowed multiple experiments to run in parallel.
+Every node in the cluster had two quad-core Intel Xeon processors with
+$4$GB of main memory. We used $2500$ seconds as the timeout for each
+invocation of {\BoundedSAT} in {\ApproxMCCore}, and $20$ hours as the
+timeout for {\ApproxMC}. If an invocation of {\BoundedSAT} in line
+$10$ of the pseudo-code of {\ApproxMCCore} timed out, we repeated the
+iteration (lines 6-11 of the pseudocode of {\ApproxMCCore}) without
+incrementing $i$. The parameters $\varepsilon$ (tolerance) and
+$\delta$ (confidence being $1-\delta$) were set to $0.75$ and $0.1$
+respectively.  With these parameters, {\ApproxMC} successfully
+computed counts for benchmarks with upto $33,000$ variables.
+%
+%
+%
+
+We implemented leap-frogging, as described in~\cite{SKV13}, to
+estimate initial values of $i$ from which to start iterating the
+repeat-until loop of lines $6$--$11$ of the pseudocode of
+{\ApproxMCCore}.  %
+%
+%
+To further optimize the running time, we obtained tighter estimates of
+the iteration count $t$ used in algorithm {\ApproxMC}, compared to
+those given by algorithm {\ComputeIterCount}.  A closer examination of
+the proof of Theorem~\ref{theorem:approx} shows that it suffices to
+have $\eta(t, t/2, 0.4) \le \delta$.  We therefore pre-computed a
+table that gave the smallest $t$ as a function of $\delta$ such that
+$\eta(t, t/2, 0.4) \le \delta$.  This sufficed for all our experiments
+and gave smaller values of $t$ (we used $t$=41 for $\delta$=0.1) compared to those given by
+{\ComputeIterCount}.
+%
+%
+%
+%
+%
+%
+%
+ 
+For purposes of comparison, we also implemented and conducted
+experiments with the exact counter
+{\Cachet}~\cite{Sang04combiningcomponent} by setting a timeout of $20$
+hours on the same computing platform.  We compared the running time of
+{\ApproxMC} with that of {\Cachet} for several benchmarks, ranging
+from benchmarks on which {\Cachet} ran very efficiently to those on
+which {\Cachet} timed out.  We also measured the quality of
+approximation produced by {\ApproxMC} as follows.  For each benchmark
+on which {\Cachet} did not time out, we obtained the approximate count
+from {\ApproxMC} with parameters $\varepsilon = 0.75$ and $\delta =
+0.1$, and checked if the approximate count was indeed within a factor
+of $1.75$ from the exact count.  Since the theoretical guarantees
+provided by our analysis are conservative, we also measured the
+relative error of the counts reported by {\ApproxCount} using the
+$L_1$ norm, for all benchmarks on which {\Cachet} did not time out.
+For an input formula $F_i$, let $A_{F_i}$ (resp., $C_{F_i}$) be the
+count returned by {\ApproxCount} (resp., {\Cachet}).  We computed the
+$L_1$ norm of the relative error as $\frac{\sum_i |A_{F_i} -
+  C_{F_i}|}{\sum_i C_{F_{i}}}$.
+     
+Since {\Cachet} timed out on most large benchmarks, we compared
+{\ApproxMC} with state-of-the-art bounding counters as well.  As
+discussed in Section~\ref{sec:intro}, bounding counters do not provide
+any tolerance guarantees.  Hence their guarantees are significantly
+weaker than those provided by {\approxMC}, and a direct comparison of
+performance is not meaningful.  Therefore, we compared the sizes of
+the intervals (i.e., difference between upper and lower bounds)
+obtained from existing state-of-the-art bounding counters with those
+obtained from {\approxMC}.  To obtain intervals from {\ApproxMC}, note
+that Theorem~\ref{theorem:approx} guarantees that if {\ApproxMC}$(F,
+\varepsilon, \delta)$ returns $c$, then $\prob[\frac{c}{1+\varepsilon}
+  \le |R_F| $ $\le (1+\varepsilon)\cdot c]$ $\ge 1-\delta$.
+Therefore, {\ApproxMC} can be viewed as computing the interval
+$[\frac{c}{1+\varepsilon}, (1+\varepsilon)\cdot c]$ for the model count,
+with confidence $\delta$.  We considered state-of-the-art lower
+bounding counters, viz.  {\MBound}~\cite{gomes2006model},
+{\HybridMBound}~\cite{gomes2006model},
+{\SampleCount}~\cite{gomes2007sampling} and
+{\BPCount}~\cite{KrocSabSel2008}, to compute a lower bound of the
+model count, and used {\MiniCount}~\cite{KrocSabSel2008} to obtain an
+upper bound.  We observed that {\SampleCount} consistently produced
+better (i.e. larger) lower bounds than {\BPCount} for our benchmarks.
+Furthermore, the authors of~\cite{gomes2006model} advocate using
+{\HybridMBound} instead of {\MBound}.  Therefore, the lower bound for
+each benchmark was obtained by taking the maximum of the bounds
+reported by {\HybridMBound} and {\SampleCount}.
+
+%
+%
+%
+%
+We set the confidence value for {\MiniCount} to $0.99$ and {\SampleCount} and {\HybridMBound} to $0.91$. For a detailed 
+justification of these choices, we refer the reader to the full version of our paper.
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+Our implementation of {\HybridMBound} used the ``conservative"
+approach described in~\cite{gomes2006model}, since this provides the
+best lower bounds with the required confidence among all the
+approaches discussed in~\cite{gomes2006model}.  Finally, to ensure
+fair comparison, we allowed all bounding counters to run for $20$
+hours on the same computing platform on which {\ApproxMC} was run.
+\vspace*{-.15in}

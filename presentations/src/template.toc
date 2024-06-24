@@ -1,6 +1,0 @@
-\beamer@sectionintoc {1}{Overview}{3}{0}{1}
-\beamer@subsectionintoc {1}{1}{About me}{3}{0}{1}
-\beamer@subsectionintoc {1}{2}{Research Topic at Kyoto University}{4}{0}{1}
-\beamer@subsectionintoc {1}{3}{Essential things for Kyoto University for research}{12}{0}{1}
-\beamer@subsectionintoc {1}{4}{Future Research Interests}{13}{0}{1}
-\beamer@subsectionintoc {1}{5}{Thank You}{14}{0}{1}

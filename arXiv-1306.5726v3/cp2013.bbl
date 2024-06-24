@@ -1,0 +1,204 @@
+\begin{thebibliography}{10}
+
+\bibitem{CryptoMiniSAT}
+{CryptoMiniSAT}.
+\newblock \url{http://www.msoos.org/cryptominisat2/}.
+
+\bibitem{HotBits}
+{HotBits}.
+\newblock \url{http://www.fourmilab.ch/hotbits}.
+
+\bibitem{Angluin1980}
+D.~Angluin.
+\newblock On counting problems and the polynomial-time hierarchy.
+\newblock {\em Theoretical Computer Science}, 12(2):161 -- 173, 1980.
+
+\bibitem{Bacchus04algorithmsand}
+F.~Bacchus, S.~Dalmao, and T.~Pitassi.
+\newblock Algorithms and complexity results for \#{SAT} and bayesian inference.
+\newblock In {\em Proc. of {FOCS}}, pages 340--351, 2004.
+
+\bibitem{Bellare98uniformgeneration}
+M.~Bellare, O.~Goldreich, and E.~Petrank.
+\newblock Uniform generation of {NP}-witnesses using an {NP}-oracle.
+\newblock {\em Information and Computation}, 163(2):510--526, 1998.
+
+\bibitem{Birnbaum1999}
+E.~Birnbaum and E.~L. Lozinskii.
+\newblock The good old {Davis-Putnam} procedure helps counting models.
+\newblock {\em Journal of Artificial Intelligence Research}, 10(1):457--477,
+  June 1999.
+
+\bibitem{SKV13}
+S.~Chakraborty, K.S. Meel, and M.Y. Vardi.
+\newblock A scalable and nearly uniform generator of {SAT} witnesses.
+\newblock In {\em Proc. of CAV}, 2013.
+
+\bibitem{darwiche2004new}
+A.~Darwiche.
+\newblock New advances in compiling {CNF} to decomposable negation normal form.
+\newblock In {\em Proc. of ECAI}, pages 328--332. Citeseer, 2004.
+
+\bibitem{domshlak2007}
+C.~Domshlak and J.~Hoffmann.
+\newblock Probabilistic planning via heuristic forward search and weighted
+  model counting.
+\newblock {\em Journal of Artificial Intelligence Research}, 30(1):565--620,
+  2007.
+
+\bibitem{ErGoSel2012}
+S.~Ermon, C.P. Gomes, and B.~Selman.
+\newblock Uniform solution sampling using a constraint solver as an oracle.
+\newblock In {\em Proc. of UAI}, 2012.
+
+\bibitem{GogDech2011}
+V.~Gogate and R.~Dechter.
+\newblock Samplesearch: Importance sampling in presence of determinism.
+\newblock {\em Artificial Intelligence}, 175(2):694--729, 2011.
+
+\bibitem{GSS08}
+C.~P. Gomes, A.~Sabharwal, and B.~Selman.
+\newblock Model counting.
+\newblock In A.~Biere, M.~Heule, H.~V. Maaren, and T.~Walsh, editors, {\em
+  Handbook of Satisfiability}, volume 185 of {\em Frontiers in Artificial
+  Intelligence and Applications}, pages 633--654. IOS Press, 2009.
+
+\bibitem{gomes2006model}
+Carla~P. Gomes, Ashish Sabharwal, and Bart Selman.
+\newblock Model counting: A new strategy for obtaining good bounds.
+\newblock In {\em Proc. of AAAI}, pages 54--61, 2006.
+
+\bibitem{gomes2007sampling}
+C.P. Gomes, J.~Hoffmann, A.~Sabharwal, and B.~Selman.
+\newblock From sampling to model counting.
+\newblock In {\em Proc. of IJCAI}, pages 2293--2299, 2007.
+
+\bibitem{Gomes-Sampling}
+C.P. Gomes, A.~Sabharwal, and B.~Selman.
+\newblock Near-uniform sampling of combinatorial spaces using {XOR}
+  constraints.
+\newblock In {\em Proc. of NIPS}, pages 670--676, 2007.
+
+\bibitem{Jerr}
+M.R. Jerrum, L.G. Valiant, and V.V. Vazirani.
+\newblock Random generation of combinatorial structures from a uniform
+  distribution.
+\newblock {\em Theoretical Computer Science}, 43(2-3):169--188, 1986.
+
+\bibitem{Bayardo97usingcsp}
+R.~J.~Bayardo Jr. and R.~Schrag.
+\newblock Using {CSP} look-back techniques to solve real-world {SAT} instances.
+\newblock In {\em Proc. of AAAI}, pages 203--208, 1997.
+
+\bibitem{KarpLuby1989}
+R.M. Karp, M.~Luby, and N.~Madras.
+\newblock {M}onte-{C}arlo approximation algorithms for enumeration problems.
+\newblock {\em Journal of Algorithms}, 10(3):429--448, 1989.
+
+\bibitem{KitKue2007}
+N.~Kitchen and A.~Kuehlmann.
+\newblock Stimulus generation for constrained random simulation.
+\newblock In {\em Proc. of ICCAD}, pages 258--265, 2007.
+
+\bibitem{KrocSabSel2008}
+L.~Kroc, A.~Sabharwal, and B.~Selman.
+\newblock Leveraging belief propagation, backtrack search, and statistics for
+  model counting.
+\newblock In {\em Proc. of CPAIOR}, pages 127--141, 2008.
+
+\bibitem{lobbing1996}
+M.~L\"{o}bbing and I.~Wegener.
+\newblock The number of knight's tours equals 33,439,123,484,294 -- counting
+  with binary decision diagrams.
+\newblock {\em The Electronic Journal of Combinatorics}, 3(1):R5, 1996.
+
+\bibitem{LubyThesis83}
+M.G. Luby.
+\newblock {\em {M}onte-{C}arlo Methods for Estimating System Reliability}.
+\newblock PhD thesis, EECS Department, University of California, Berkeley, Jun
+  1983.
+
+\bibitem{minato93}
+S.~Minato.
+\newblock Zero-suppressed bdds for set manipulation in combinatorial problems.
+\newblock In {\em Proc. of Design Automation Conference}, pages 272--277, 1993.
+
+\bibitem{Roth1996}
+D.~Roth.
+\newblock On the hardness of approximate reasoning.
+\newblock {\em Artificial Intelligence}, 82(1):273--302, 1996.
+
+\bibitem{Rubin2012}
+R.~Rubinstein.
+\newblock Stochastic enumeration method for counting np-hard problems.
+\newblock {\em Methodology and Computing in Applied Probability}, pages 1--43,
+  2012.
+
+\bibitem{Sang04combiningcomponent}
+T.~Sang, F.~Bacchus, P.~Beame, H.~Kautz, and T.~Pitassi.
+\newblock Combining component caching and clause learning for effective model
+  counting.
+\newblock In {\em Proc. of SAT}, 2004.
+
+\bibitem{SangBearKautz2005}
+T.~Sang, P.~Bearne, and H.~Kautz.
+\newblock Performing bayesian inference by weighted model counting.
+\newblock In {\em Prof. of AAAI}, pages 475--481, 2005.
+
+\bibitem{Schmidt}
+J.~P. Schmidt, A.~Siegel, and A.~Srinivasan.
+\newblock {Chernoff-Hoeffding} bounds for applications with limited
+  independence.
+\newblock {\em SIAM Journal on Discrete Mathematics}, 8:223--250, May 1995.
+
+\bibitem{simon77}
+J.~Simon.
+\newblock On the difference between one and many.
+\newblock In {\em Proc. of ICALP}, pages 480--491, 1977.
+
+\bibitem{Sipser83}
+M.~Sipser.
+\newblock A complexity theoretic approach to randomness.
+\newblock In {\em Proc. of STOC}, pages 330--335, 1983.
+
+\bibitem{Stockmeyer83}
+L.~Stockmeyer.
+\newblock The complexity of approximate counting.
+\newblock In {\em Proc. of STOC}, pages 118--126, 1983.
+
+\bibitem{Thurley2006}
+M.~Thurley.
+\newblock {sharpSAT}: counting models with advanced component caching and
+  implicit bcp.
+\newblock In {\em Proc. of {SAT}}, pages 424--429, 2006.
+
+\bibitem{toda1989computational}
+S.~Toda.
+\newblock On the computational power of {PP} and {(+)P}.
+\newblock In {\em Proc. of FOCS}, pages 514--519. IEEE, 1989.
+
+\bibitem{trevisan2002lecture}
+L.~Trevisan.
+\newblock Lecture notes on computational complexity.
+\newblock {\em Notes written in Fall}, 2002.
+\newblock
+  \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.71.9877&rep=rep1&type=pdf}.
+
+\bibitem{valiant1979complexity}
+L.G. Valiant.
+\newblock The complexity of enumeration and reliability problems.
+\newblock {\em SIAM Journal on Computing}, 8(3):410--421, 1979.
+
+\bibitem{wei2005new}
+W.~Wei and B.~Selman.
+\newblock A new approach to model counting.
+\newblock In {\em Proc. of SAT}, pages 2293--2299. Springer, 2005.
+
+\bibitem{Yuan2004}
+J.~Yuan, A.~Aziz, C.~Pixley, and K.~Albin.
+\newblock Simplifying boolean constraint solving for random simulation-vector
+  generation.
+\newblock {\em IEEE Trans. on CAD of Integrated Circuits and Systems},
+  23(3):412--420, 2004.
+
+\end{thebibliography}

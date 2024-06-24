@@ -1,9 +1,9 @@
 # Fdb version 4
-["pdflatex"] 1717477683 "/Users/tejas/Desktop/resources_/kustar/work/presentations/src/template.tex" "template.pdf" "template" 1717477687 0
+["pdflatex"] 1719204606 "/Users/tejas/Desktop/resources_/kustar/work/presentations/board_presentation/src/template.tex" "template.pdf" "template" 1719204609 0
   "../fig/Indian_Institute_of_Technology_Delhi_Logo.svg.png" 1716884216 87900 283ea8b2b7e01a957a9f66581da56702 ""
   "../fig/Kyoto_University_emblem.svg.png" 1716883928 123248 ec1cdb7c5ec67bdab0c505505a6b0e49 ""
   "../fig/pres.png" 1716962057 8557787 ccccd65e47a1675203c71ee4fcef9093 ""
-  "/Users/tejas/Desktop/resources_/kustar/work/presentations/src/template.tex" 1717477683 21103 f5328da2a74b5d12fc858112536f6cae ""
+  "/Users/tejas/Desktop/resources_/kustar/work/presentations/board_presentation/src/template.tex" 1719204605 21104 4dd8280dbb2f9bd7b7b68c49713ce310 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/opensans/a_n3lhbv.enc" 1561498186 2876 59df564f2929ccd7d2b24aa7d14cad04 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -221,11 +221,11 @@
   "/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1685089589 4623355 b8cad38412faebe1ce5b780a45db67bd ""
   "/usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1685089569 7883455 f583ec17942d47fd69ecf58094ffbab8 ""
   "/usr/local/texlive/2023/texmf.cnf" 1678822455 577 1b2b1af17af2508fb20dd85783af4050 ""
-  "template.aux" 1717477687 3865 3978767f7c9e2e90d1068236b7640f69 "pdflatex"
-  "template.nav" 1717477687 2135 6b5c909c8488829f0ab7c48ede185d4b "pdflatex"
-  "template.out" 1717477687 1043 a094720d465c43e0bae5e5aa6c01560c "pdflatex"
-  "template.tex" 1717477683 21103 f5328da2a74b5d12fc858112536f6cae ""
-  "template.toc" 1717477687 383 b444e856d901b5d4910912da9b4ffdf8 "pdflatex"
+  "template.aux" 1719204609 3865 3978767f7c9e2e90d1068236b7640f69 "pdflatex"
+  "template.nav" 1719204609 2135 6b5c909c8488829f0ab7c48ede185d4b "pdflatex"
+  "template.out" 1719204609 1043 a094720d465c43e0bae5e5aa6c01560c "pdflatex"
+  "template.tex" 1719204605 21104 4dd8280dbb2f9bd7b7b68c49713ce310 ""
+  "template.toc" 1719204609 383 b444e856d901b5d4910912da9b4ffdf8 "pdflatex"
   (generated)
   "template.aux"
   "template.log"

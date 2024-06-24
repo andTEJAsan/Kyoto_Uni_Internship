@@ -1,0 +1,72 @@
+\section{Notation and Preliminaries}\label{sec:prelims}
+
+Let $\Sigma$ be an alphabet and $R \subseteq \Sigma^* \times \Sigma^*$
+be a binary relation.  We say that $R$ is an \mc{NP}-relation if $R$
+is polynomial-time decidable, and if there exists a polynomial
+$p(\cdot)$ such that for every $(x, y) \in R$, we have $|y| \le
+p(|x|)$.  Let $L_R$ be the language $\{x \in \Sigma^* \mid \exists y
+\in \Sigma^*,\, (x, y) \in R\}$.  The language $L_R$ is said to be in
+\mc{NP} if $R$ is an \mc{NP}-relation.  The set of all satisfiable
+propositional logic formulae in CNF is a language in \mc{NP}.  
+Given $x \in L_R$, a \emph{witness} or \emph{model} of $x$
+is a string $y \in \Sigma^*$ such that $(x, y) \in R$.  The set of all
+models of $x$ is denoted $R_x$.  For notational convenience,
+fix $\Sigma$ to be $\{0, 1\}$ without loss of generality.  If $R$ is
+an \mc{NP}-relation, we may further assume that for every $x \in L_R$,
+every witness $y \in R_x$ is in $\{0, 1\}^n$, where $n = p(|x|)$ for
+some polynomial $p(\cdot)$.
+
+Let $R \subseteq \{0,1\}^* \times \{0,1\}^*$ be an \mc{NP} relation.
+The \emph{counting problem} corresponding to $R$ asks ``Given $x \in
+\{0,1\}^*$, what is $|R_x|$?''.  If $R$ relates CNF propositional
+formulae to their satisfying assignments, the corresponding counting
+problem is called {\sharpSAT}.  The primary focus of this paper is on
+$(\varepsilon, \delta)$ counters for {\sharpSAT}.  The randomized
+$(\varepsilon, \delta)$ counters of Karp and Luby~\cite{KarpLuby1989}
+for DNF formulas are \emph{fully polynomial}, which means that
+they run in time \added{polynomial} in the size of the input 
+formula $F$, $1/\varepsilon$ and $\log(1/\delta)$.  The randomized 
+$(\varepsilon, \delta)$ counters for CNF formulas in \cite{Jerr}
+and in this paper are however fully polynomial \emph{with respect to a SAT oracle}.
+
+%
+%
+%
+A special class of hash functions, called \emph{$r$-wise independent} 
+hash functions, play a crucial role in our work.
+Let $n, m$ and $r$ be positive integers, and let $H(n,m,r)$ denote a
+family of $r$-wise independent hash functions mapping $\{0, 1\}^n$ to $\{0, 1\}^m$.  We use 
+$\prob\left[X: {\cal P} \right]$ to denote the probability of outcome 
+$X$ when sampling from a probability space ${\cal P}$, and 
+$h \xleftarrow{R} H(n,m,r)$ to denote the probability space obtained by
+choosing a hash function $h$ uniformly at random from $H(n,m,r)$. The 
+property of $r$-wise independence guarantees 
+that for all $\alpha_1, \ldots \alpha_r \in \{0,1\}^m $ and
+for all distinct $y_1, \ldots y_r \in \{0,1\}^n$, 
+$\prob\left[\bigwedge_{i=1}^r h(y_i) = \alpha_i\right.$ $\left.: 
+h \xleftarrow{R} H(n, m, r)\right] = 2^{-mr}$.  For every $\alpha \in
+\{0, 1\}^m$ and $h \in H(n, m, r)$, let $h^{-1}(\alpha)$ denote the
+set $\{y \in \{0, 1\}^n \mid h(y) = \alpha\}$.  Given $R_x \subseteq
+\{0, 1\}^n$ and $h \in H(n, m, r)$, we use $R_{x, h, \alpha}$ to
+denote the set $R_x \cap h^{-1}(\alpha)$.  If we keep $h$ fixed and
+let $\alpha$ range over $\{0, 1\}^m$, the sets $R_{x, h, \alpha}$ form
+a partition of $R_x$.  Following the notation in ~\cite{Bellare98uniformgeneration}, we call each element of
+such a \added{partition} a \emph{cell} of $R_x$ \emph{induced} by $h$.  It was 
+shown in~\cite{Bellare98uniformgeneration} that if $h$ is chosen
+uniformly at random from $H(n, m,r)$ for $r \ge 1$, then the expected 
+size of $R_{x,h,\alpha}$, 
+denoted $\expect\left[|R_{x,h,\alpha}|\right]$,
+is $|R_x|/2^m$, for each $\alpha \in \{0, 1\}^m$.
+
+ The specific family of hash functions used in our work, denoted
+ $H_{xor}(n, m, 3)$, is based on randomly choosing bits from $y \in
+ \{0, 1\}^n$ and xor-ing them. This family of hash functions has been
+ used in earlier work ~\cite{gomes2006model}, and has been shown to be
+ 3-independent in ~\cite{Gomes-Sampling}.  Let $h(y)[i]$ denote the
+ $i^{th}$ component of the bit-vector obtained by applying hash
+ function $h$ to $y$.  The family $H_{xor}(n, m, 3)$ is defined as
+ $\{h(y) \mid (h(y))[i] = a_{i,0} \oplus (\bigoplus_{k=1}^n
+ a_{i,k}\cdot y[k]), a_{i,j} \in \{0, 1\}, 1 \leq i \leq m, 0 \leq j
+ \leq n\}$, where $\oplus$ denotes the xor operation.  By randomly
+ choosing the $a_{i,j}$'s, we can randomly choose a hash function from
+ this family.

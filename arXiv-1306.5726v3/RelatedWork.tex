@@ -1,0 +1,231 @@
+\section{Related Work}\label{sec:relatedwork}
+
+
+Sipser pioneered a hashing based approach in ~\cite{Sipser83}, which
+has subsequently been used in theoretical
+~\cite{trevisan2002lecture,Bellare98uniformgeneration} and practical
+~\cite{Gomes-Sampling,gomes2006model,SKV13} treatments of approximate counting and
+(near-)uniform sampling.
+%
+%
+%
+%
+Earlier implementations of counters that use the hashing-based
+approach are {\MBound} and {\HybridMBound}~\cite{gomes2006model}.
+Both these counters use the same family of hashing functions, i.e.,
+$H_{xor}(n, m, 3)$, that we use.  Nevertheless, there are significant
+differences between our algorithm and those of {\MBound} and
+{\HybridMBound}.  Specifically, we are able to exploit properties of
+the $H_{xor}(n, m, 3)$ family of hash functions to obtain a fully
+polynomial $(\varepsilon, \delta)$ counter with respect to a SAT
+oracle.  In contrast, both {\MBound} and {\HybridMBound} are bounding
+counters, and cannot provide bounds on tolerance.  In addition, our
+algorithm requires no additional parameters beyond the tolerance
+$\varepsilon$ and confidence $1-\delta$.  In contrast, the performance
+and quality of results of both {\MBound} and {\HybridMBound}, depend
+crucially on some hard-to-estimate parameters.  It has been our
+experience that the right choice of these parameters is often domain
+dependent \added{and difficult}.
+
+Jerrum, Valiant and Vazirani~\cite{Jerr} showed that if $R$ is a 
+self-reducible \mc{NP} relation (such as SAT),
+%
+%
+the problem of generating models \emph{almost uniformly} is 
+polynomially inter-reducible with approximately counting models.  The 
+notion of almost uniform generation requires that if $x$ 
+is a problem instance, then for every $y \in R_x$, we have $(1
++ \varepsilon)^{-1}\varphi(x)$ $\le$ $\prob[y \mbox{ is generated}]$
+$\le$ $(1 + \varepsilon)\varphi(x)$, where 
+$\varepsilon > 0$ is the specified tolerance and $\varphi(x)$ is an
+appropriate function. Given an almost 
+uniform generator $\mc{G}$ for $R$, an input $x$, a tolerance bound
+$\varepsilon$ and an error probability bound $\delta$, it is shown
+in \cite{Jerr} that one can obtain an $(\varepsilon, \delta)$
+counter for $R$ by invoking $\mc{G}$ polynomially (in $|x|$,
+$1/\varepsilon$ and $\log_2(1/\delta)$) many times, and by using the
+generated samples to estimate $|R_x|$.  For convenience of exposition,
+we refer to this approximate-counting algorithm as the {\JVV}
+algorithm (after the last names of the authors).
+
+An important feature of the {\JVV} algorithm is that it uses the
+almost uniform generator $\mc{G}$ as a black box.  Specifically, the
+details of how $\mc{G}$ works is of no consequence.  Prima facie, this
+gives us freedom in the choice of $\mc{G}$ when implementing the
+{\JVV} algorithm.  Unfortunately, while there are theoretical 
+constructions of uniform 
+generators in~\cite{Bellare98uniformgeneration},
+we are not aware of any implementation of an almost uniform generator 
+that scales to CNF formulas involving thousands of variables.
+%
+%
+%
+%
+%
+%
+The lack of a scalable and almost uniform generator presents
+a significant hurdle in implementing the {\JVV} algorithm for
+practical applications.
+It is worth asking if we can make the {\JVV} algorithm work without
+requiring $\mc{G}$ to be an almost uniform generator.  A closer look
+at the proof of correctness of the {\JVV} algorithm~\cite{Jerr} shows
+it relies crucially on the ability of $\mc{G}$ to ensure that the
+probabilities of generation of any two distinct models of $x$ differ
+by a factor in $O(\varepsilon^2)$.  As discussed in~\cite{SKV13},
+existing algorithms for randomly generating models either provide this
+guarantee but scale very poorly in practice (e.g., the algorithms
+in~\cite{Bellare98uniformgeneration,Yuan2004}), or scale well in
+practice without providing the above guarantee (e.g., the algorithms
+in~\cite{SKV13,Gomes-Sampling,KitKue2007}).  Therefore, using an
+existing generator as a black box in the {\JVV} algorithm would not
+give us an $(\varepsilon, \delta)$ model counter that scales in
+practice. %
+%
+%
+%
+The primary contribution of this paper is to show that a scalable
+$(\varepsilon, \delta)$ counter can indeed be designed by using the
+same insights that went into the design of a \emph{near uniform}
+generator, {\UniformWitness}~\cite{SKV13}, but without using the
+generator as a black box in \added{the} approximate counting
+algorithm.  Note that near uniformity, as defined in~\cite{SKV13}, is
+an even more relaxed notion of uniformity than almost uniformity.  We
+leave the question of whether a near uniform generator can be used as
+a black box to design an $(\varepsilon, \delta)$ counter as part of
+future work.
+
+ The central idea of {\UniformWitness}, which is also shared by our
+ approximate model counter, is the use of $r$-wise independent hashing
+ functions to randomly partition the space of all models of a given
+ problem instance into ``small'' cells. This idea was first proposed
+ in~\cite{Bellare98uniformgeneration}, but there are two novel
+ insights that allow {\UniformWitness}~\cite{SKV13} to scale better
+ than other hashing-based sampling
+ algorithms~\cite{Bellare98uniformgeneration,Gomes-Sampling}, while
+ still providing guarantess on the quality of sampling.  These
+ insights are: (i) the use of computationally efficient linear hashing
+ functions with low degrees of independence, and (ii) a drastic
+ reduction in the size of ``small'' cells, from $n^2$
+ in~\cite{Bellare98uniformgeneration} to $n^{1/k}$ (for $2 \le k \le
+ 3$) in~\cite{SKV13}, and even further to a constant in the current
+ paper. %
+                      %
+                      %
+                      %
+We continue to use these key insights in the design of our approximate model counter,
+although {\UniformWitness} is not used explicitly in the model counter.
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%

@@ -1,8 +1,8 @@
-PWD /Users/tejas/Desktop/resources_/kustar/work/presentations/src
+PWD /Users/tejas/Desktop/resources_/kustar/work/presentations/board_presentation/src
 INPUT /usr/local/texlive/2023/texmf.cnf
 INPUT /usr/local/texlive/2023/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/tejas/Desktop/resources_/kustar/work/presentations/src/template.tex
+INPUT /Users/tejas/Desktop/resources_/kustar/work/presentations/board_presentation/src/template.tex
 OUTPUT template.log
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/beamer/beamer.cls
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/beamer/beamer.cls

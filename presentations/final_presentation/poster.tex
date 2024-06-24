@@ -1,0 +1,290 @@
+% Gemini theme
+% https://github.com/anishathalye/gemini
+% We try to keep this Overleaf template in sync with the canonical source on
+% GitHub, but it's recommended that you obtain the template directly from
+% GitHub to ensure that you are using the latest version.
+
+% Brown University color schemes for Gemini theme
+% https://github.com/vskbellala/gemini-brown
+
+\documentclass[final]{beamer}
+
+% ====================
+% Packages
+% ====================
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+% \usepackage[size=custom,width=118.9,height=84.1,scale=1.3]{beamerposter}
+\usepackage[size=a0,orientation=landscape,scale=1.3]{beamerposter}
+\usetheme{gemini}
+% \usecolortheme{albatross}
+\usecolortheme{brownminimal}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.14}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+% ====================
+% Lengths
+% ====================
+
+% If you have N columns, choose \sepwidth and \colwidth such that
+% (N+1)*\sepwidth + N*\colwidth = \paperwidth
+\newlength{\sepwidth}
+\newlength{\colwidth}
+\setlength{\sepwidth}{0.025\paperwidth}
+\setlength{\colwidth}{0.3\paperwidth}
+
+\newcommand{\separatorcolumn}{\begin{column}{\sepwidth}\end{column}}
+
+% ====================
+% Title
+% ====================
+
+\title{Approximate Model Counting and its applications in Quantitative Information Flow}
+
+\author{Tejas Anand\inst{1} \and Kohei Suenaga\inst{2}}
+
+\institute[shortinst]{IIT Delhi \inst{1} \samelineand Kyoto University \inst{2} }
+
+% ====================
+% Footer (optional)
+% ====================
+
+% \footercontent{
+  % \href{https://www.example.com}{https://www.example.com} \hfill
+  % ABC Conference 2025, New York --- XYZ-1234 \hfill
+  % \href{mailto:alyssa.p.hacker@example.com}{alyssa.p.hacker@example.com}}
+% (can be left out to remove footer)
+
+% ====================
+% Logo (optional)
+% ====================
+
+% use this to include logos on the left and/or right side of the header:
+\logoright{\includegraphics[scale=0.6]{images/Kyoto_University_emblem.svg.png}}
+\logoleft{\includegraphics[scale=0.6]{images/Indian_Institute_of_Technology_Delhi_Logo.svg.png}}
+% \logoleft{\includegraphics[height=7cm]{images/Brown_full.png}}
+
+
+% ====================
+% Body
+% ====================
+
+\begin{document}
+
+\begin{frame}[t]
+\begin{columns}[t]
+\separatorcolumn
+
+\begin{column}{\colwidth}
+
+  \begin{block}{What is Model Counting ? }
+
+    % Some block contents, followed by a diagram, followed by a dummy paragraph.
+
+    % \begin{figure}
+    %   \centering
+    %   \begin{tikzpicture}[scale=6]
+    %     \draw[step=0.25cm,color=gray] (-1,-1) grid (1,1);
+    %     \draw (1,0) -- (0.2,0.2) -- (0,1) -- (-0.2,0.2) -- (-1,0)
+    %       -- (-0.2,-0.2) -- (0,-1) -- (0.2,-0.2) -- cycle;
+    %   \end{tikzpicture}
+    %   \caption{A figure caption.}
+    % \end{figure}
+
+    % Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies
+    % eget libero ac ullamcorper. Integer et euismod ante. Aenean vestibulum
+    % lobortis augue, ut lobortis turpis rhoncus sed. Proin feugiat nibh a
+    % lacinia dignissim. Proin scelerisque, risus eget tempor fermentum, ex
+    % turpis condimentum urna, quis malesuada sapien arcu eu purus.
+    	\begin{itemize}
+		\item Model counting is the problem of counting the number of solutions to a given set of constraints.
+		\item The problem of Model Counting (\#$\mathsf{SAT}$) is \#$\mathsf{P}$-complete. In very simple words, finding the \textcolor{red}{Exact Count} would take an abnormally high amount of time.
+		\item Therefore, we work with an $(\epsilon,\delta)$ approximation algorithm $\mathcal{A}$, whose output $\mathsf{n}$ over a problem instance $\mathcal{F}$ satisfies,
+
+	\end{itemize}
+	\[
+		\Pr[\mathsf{n} \leftarrow \mathcal{A}(\mathcal{F}) :  \frac{\#\mathcal{F}}{1 + \epsilon} \leq \mathsf{n} \leq \#\mathcal{F}(1 + \epsilon)  ]	 \geq  1 - \delta
+	\]
+	\begin{itemize}
+		\item  In simple words, it gives a good enough number with high probability, for small values of $\epsilon$ and $\delta$.
+		\item For instance, we might want to count the number of equivalence classes of the given relation
+		\begin{equation}
+			x \sim y \Leftrightarrow x \equiv y \equiv 0 \mod 8 \vee x = y
+		\end{equation}
+	\end{itemize}
+  \end{block}
+
+  \begin{block}{Research Problem}
+    	\begin{itemize}
+     
+		\item Recently, a scalable approximation algorithm for model counting over boolean constraints was propsed by Chakraborty et al.
+		\item We want to generalize this algorithm to simple arithmetic constraints like modulo, addition, subtraction, etc. over integers (finite fields like $Z_n$) and lists, using SMT solvers (SAT modulo theory) like Z3.
+		\item This has applications in computer security, it would be the main ingredient to quantify the sensitive information leaked by a computer programme.
+        \item In the internship so I proved the correctness for the algorithm over finite fields of integers $Z_k=\{0,1,\cdots k - 1\}$
+	\end{itemize}
+
+    % Nam vulputate nunc felis, non condimentum lacus porta ultrices. Nullam sed
+    % sagittis metus. Etiam consectetur gravida urna quis suscipit.
+
+    % \begin{itemize}
+    %   \item \textbf{Mauris tempor} risus nulla, sed ornare
+    %   \item \textbf{Libero tincidunt} a duis congue vitae
+    %   \item \textbf{Dui ac pretium} morbi justo neque, ullamcorper
+    % \end{itemize}
+
+    % Eget augue porta, bibendum venenatis tortor.
+
+  \end{block}
+
+  \begin{block}{Chernoff Bounds}
+  \begin{itemize}
+      \item Chernoff Bounds are used to bound the probability of the value of a random variable lying outside a given window around the mean. A Chernoff Bound is used to prove the correctness of our Algorithm.
+  \end{itemize}
+	\textbf{Theorem. }Let $\Gamma$ be the sum of of r-wise independent random variables, each of
+	which is conﬁned to the interval $[0,1]$, and suppose that $E[\Gamma] = \mu$. For $0 < \beta 
+	\leq 1$, if $r \leq \lfloor \beta^2 \mu e^{-1/2} \rfloor \leq 4$, then $\Pr[|\Gamma - \mu| > \beta \mu] \leq e^{-r/2} $
+
+  \end{block}
+
+\end{column}
+
+\separatorcolumn
+
+\begin{column}{\colwidth}
+
+  \begin{block}{Example}
+    	 \textbf{Question:} How many equivalence classes does the following relation have, where $x,y$ are 32 bit integers ? 
+	\begin{equation}
+		x \sim y \Leftrightarrow x \equiv y \equiv 0 \mod 8 \textbf{ or } x = y
+	\end{equation}
+	% \pause
+	\begin{center}
+		\textbf{Answer:} $7\cdot2^{29} + 1$. All of the multiples of 8 form 1 equivalence class, and the remaining $7/8^{ths}$ of the total $2^{32}$ integers form singleton equivalence classes of their own.
+	\end{center}
+	% \pause
+	\begin{center}
+		$(x \equiv y \equiv 0 \mod 8) \vee (x = y) \rightarrow$ \fbox{\textbf{Our Algorithm}}  $\rightsquigarrow 7\cdot2^{29}$
+	\end{center}
+    % Vivamus congue volutpat elit non semper. Praesent molestie nec erat ac
+    % interdum. In quis suscipit erat. \textbf{Phasellus mauris felis, molestie
+    % ac pharetra quis}, tempus nec ante. Donec finibus ante vel purus mollis
+    % fermentum. Sed felis mi, pharetra eget nibh a, feugiat eleifend dolor. Nam
+    % mollis condimentum purus quis sodales. Nullam eu felis eu nulla eleifend
+    % bibendum nec eu lorem. Vivamus felis velit, volutpat ut facilisis ac,
+    % commodo in metus.
+
+    % \begin{enumerate}
+    %   \item \textbf{Morbi mauris purus}, egestas at vehicula et, convallis
+    %     accumsan orci. Orci varius natoque penatibus et magnis dis parturient
+    %     montes, nascetur ridiculus mus.
+    %   \item \textbf{Cras vehicula blandit urna ut maximus}. Aliquam blandit nec
+    %     massa ac sollicitudin. Curabitur cursus, metus nec imperdiet bibendum,
+    %     velit lectus faucibus dolor, quis gravida metus mauris gravida turpis.
+    %   \item \textbf{Vestibulum et massa diam}. Phasellus fermentum augue non
+    %     nulla accumsan, non rhoncus lectus condimentum.
+    % \end{enumerate}
+
+  \end{block}
+
+  \begin{block}{Polynomially Many Queries to the oracle SMT}
+
+    \begin{itemize}
+        \item For simplicity, we have an oracle $\mathsf{SMT}$, which on invocation over an arithmetic formula $\mathcal{F}$, gives us any one solution to it or tells if it is $\mathsf{UNSAT}$.
+        \item The model count, $#\mathcal{F}$ can be exponentially large, so the naive approach of invoking the oracle till we get no new solutions is infeasible.
+        \item A better way is to keep adding the negation of all the models we have obtained so far to the formula $\mathcal{F}$ as $\mathcal{F} \leftarrow \mathcal{F} \land (x \neq x_0) \land (x \neq x_1) \cdots (x \neq x_i)$, where $x_0, x_1, \cdots x_i$ are the models obtained so far. This approach is better than the first one, but it is still exponential.
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{How ApproxMC works, intuitively}
+  
+    \begin{itemize}
+        \item We must take advantage of the fact that we are not concerened with the exact model count.
+        \item So we divide the set of models uniformly into \textbf{cells}, using a randomly sampled $r-$wise independent hash function. 
+        \item All models having a given hash-value belong to a given cell.
+        \item The representative count of a given cell is then multiplied by the number of cells to get an approximate count of the total number of models of the formula.
+        \item We try to make the number of cells such that it is "fine grained" enough and has $\leq pivot$ models in it.
+        \item This $pivot$ is a function of the threshold $\varepsilon$ around the correct model that we desire. It is of the order $\mathcal{O}(1/\varepsilon^2)$.
+        \item Hence, we only need to make a bounded number of invocations to the oracle $\mathsf{SMT}$.
+    \end{itemize}
+    
+  \end{block}
+
+\end{column}
+
+\separatorcolumn
+
+\begin{column}{\colwidth}
+
+  \begin{block}{}
+\begin{algorithm}[H]
+	\caption{$\mathsf{ApproxMCCore}(F,pivot)$}
+\begin{algorithmic}[1]
+	\State $S \gets \mathsf{BoundedSMT}(F, pivot + 1)$
+		\Comment{Assume $x_1, x_2 \cdots x_q$ are the variables of $F$}
+	\If{$|S| \leq pivot$}
+		\State \textbf{return} $|S|$;
+	\Else
+		% \State $m \gets m + 1$
+		% \State Choose a new hash function from $\mathcal{H}_k(n, m, r)$
+		\State $l \gets \lfloor log_{k}(pivot) \rfloor - 1$; $i \gets l - 1$
+		\Repeat
+		\State $i \gets i + 1$;
+		\State Choose $h \gets \mathcal{H}_k(n, i - l , 3)$ uniformly at random;
+		\State Choose $\alpha \gets Z_k^{i - l}$ uniformly at random;
+		\State $S \gets \mathsf{BoundedSMT}(F \wedge h(x_1,x_2\cdots x_q) = \alpha, pivot + 1)$
+		\Until{$(1 \leq |S| \leq pivot)$ or $(i = n)$};
+	\EndIf
+	% \If{} 
+	% % 	% \State \textbf{return} $\bot$;
+	% \Else 
+	% \EndIf
+	\If{$(|S| > pivot$ \textbf{ or } $|S| = 0)$}
+		\State \textbf{return} $\bot$;
+	\Else 
+		\State \textbf{return} $|S|\cdot k ^{i - l}$;
+	\EndIf
+
+    \end{algorithmic}
+\end{algorithm}
+
+    $\mathcal{H}_k(n,m,r)$ = Set of hash functions from $Z_k^{n} \rightarrow Z_k^{m}$ which are  $r$-wise independent
+    The no. of cells is equal to the number of unique hash values possible which is equal to $|Z_k^m| = k^m$
+  \end{block}
+
+  \begin{block}{Quantitative Information Flow}
+
+    \begin{itemize}
+        \item We often require the number of equivalence classes to calculate the \textbf{Bayes Vulnerability} which is an Adversary's maximum probability of guessing the correct "secret" given he knows the encryption scheme.
+        \item For some information theoretic measures, we even require the size of each equivalence class.
+        \item Our work can be used to quantify the sensitive information leaked by a computer program.
+    \end{itemize}
+
+  \end{block}
+
+  \begin{block}{References}
+
+    \nocite{*}
+    \footnotesize{\bibliographystyle{abbrv}\bibliography{poster}}
+
+  \end{block}
+
+\end{column}
+
+\separatorcolumn
+\end{columns}
+\end{frame}
+
+\end{document}

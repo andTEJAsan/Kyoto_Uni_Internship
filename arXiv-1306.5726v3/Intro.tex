@@ -1,0 +1,157 @@
+\section{Introduction}\label{sec:intro}
+Propositional model counting, also known as {\sharpSAT}, concerns 
+counting the number of models (satisfying truth assignments) of a
+given propositional formula.  This problem has been the subject of
+extensive theoretical investigation since its introduction by
+Valiant~\cite{valiant1979complexity} in 1979.  Several interesting 
+applications of {\sharpSAT} have been studied in the context of 
+probabilistic reasoning, planning, combinatorial design and other 
+related fields~\cite{Roth1996,Bacchus04algorithmsand,domshlak2007}.  
+In particular, probabilistic reasoning and inferencing have attracted
+considerable interest in recent years~\cite{GSS08}, and stand to
+benefit significantly from efficient propositional model counters.
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
+%
+Theoretical investigations of {\sharpSAT} have led to the discovery of 
+deep connections in complexity theory 
+\cite{Angluin1980,simon77,toda1989computational}: 
+{\sharpSAT} is {\sharpP}-complete, where {\sharpP} is the set of
+counting problems associated with decision problems in the complexity
+class {\NP}.  Furthermore, $\mathsf{P}^{\sharpSAT}$, that is,
+a polynomial-time machine with a {\sharpSAT} oracle, can solve all 
+problems in the entire polynomial hierarchy. In fact, the 
+polynomial-time machine only needs to make one {\sharpSAT} query to 
+solve any problem in the polynomial hierarchy. This is strong evidence 
+for the hardness of {\sharpSAT}.
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
+In many applications of model counting, such as in probabilistic
+reasoning, the exact model count may not be critically important, and
+approximate counts are sufficient.  Even when exact model counts are
+important, the inherent complexity of the problem may force one to
+work with approximate counters in practice.  In~\cite{Stockmeyer83},
+Stockmeyer showed that counting models within a specified tolerance
+factor can be achieved in deterministic polynomial time using a
+$\Sigma_2^p$-oracle.  Karp and Luby presented a fully polynomial
+randomized approximation scheme for counting models of a DNF formula
+\cite{KarpLuby1989}.  Building on Stockmeyer's result, Jerrum, Valiant 
+and Vazirani~\cite{Jerr} showed that counting models of CNF formulas
+within a specified tolerance factor can be solved in random polynomial 
+time using an oracle for {\SAT}.  
+%
+%
+%
+%
+%
+
+On the implementation front, the earliest approaches to {\sharpSAT}
+were based on DPLL-style {\SAT} solvers and computed exact counts.
+These approaches consisted of incrementally counting the number of
+solutions by adding appropriate multiplication factors after a partial
+solution was found.  This idea was formalized by Birnbaum and
+Lozinkii~\cite {Birnbaum1999} in their model counter {\CDP}.  Subsequent
+model counters such as {\Relsat}~\cite{Bayardo97usingcsp},
+{\Cachet}~\cite{Sang04combiningcomponent} and
+{\sharpSATTool}~\cite{Thurley2006} improved upon this idea by using
+several optimizations such as component caching, clause learning,
+look-ahead and the like.  Techniques based on Boolean Decision
+Diagrams and their variants~\cite{minato93,lobbing1996}, or d-DNNF
+formulae~\cite{darwiche2004new}, have also been used to compute exact
+model counts.  Although exact model counters have been successfully
+used in small- to medium-sized problems, scaling to larger problem
+instances has posed significant challenges in practice.  Consequently,
+a large class of practical applications has remained beyond the reach
+of exact model counters.
+
+To counter the scalability challenge, more efficient techniques for
+counting models approximately have been proposed.  These counters can
+be broadly divided into three categories.  Counters in the first
+category are called $(\varepsilon, \delta)$ counters, following Karp
+and Luby's terminology~\cite{KarpLuby1989}.  Let $\varepsilon$ and
+$\delta$ be real numbers such that $ 0 < \varepsilon \leq 1$ and $0 <
+\delta \le 1$.  For every propositional formula $F$ with $\#F$ models,
+an $(\varepsilon, \delta)$ counter computes a number that lies in the
+interval $[(1+\varepsilon)^{-1}\#F, (1+\varepsilon)\#F]$ with
+probability at least $1-\delta$.  We say that $\varepsilon$ is the
+\emph{tolerance} of the count, and $1-\delta$ is its
+\emph{confidence}.  The counter described in this paper and also that
+due to Karp and Luby~\cite{KarpLuby1989} belong to this category.  The
+approximate-counting algorithm of Jerrum et al.~\cite{Jerr} also
+belongs to this category; however, their algorithm does not lend
+itself to an implementation that scales in practice.  Counters in the
+second category are called \emph{lower (or upper) bounding counters},
+and are parameterized by a confidence probability $1-\delta$.  For every
+propositional formula $F$ with $\#F$ models, an upper (resp., lower)
+bounding counter computes a number that is at least as large (resp.,
+as small) as $\#F$ with probability at least $1 - \delta$.  Note that
+bounding counters \emph{do not} provide any tolerance guarantees.  The
+large majority of approximate counters used in practice are bounding
+counters.  Notable examples include
+{\SampleCount}~\cite{gomes2007sampling},
+{\BPCount}~\cite{KrocSabSel2008}, {\MBound} (and
+{\HybridMBound})~\cite{gomes2006model}, and
+{\MiniCount}~\cite{KrocSabSel2008}.  The final category of counters is
+called \emph{guarantee-less counters}.  These counters provide no
+guarantees at all but they can \added{be} very efficient and provide good
+approximations in practice.  \added{Examples of guarantee-less counters include
+{\ApproxCount}~\cite{wei2005new}, {\SearchTreeSampler}~\cite{ErGoSel2012}, {\SE}~\cite{Rubin2012} and {\SampleSearch}~\cite{GogDech2011}.}
+
+Bounding both the tolerance and confidence of approximate model counts
+is extremely valuable in applications like probabilistic inference.
+Thus, designing $(\varepsilon, \delta)$ counters that scale to
+practical problem sizes is an important problem.  Earlier work on
+$(\varepsilon, \delta)$ counters has been restricted largely to
+theoretical treatments of the problem.  The only counter in this
+category that we are aware of as having been implemented is due to
+Karp and Luby~\cite{LubyThesis83}.  Karp and Luby's original
+implementation was designed to estimate reliabilities of networks with
+failure-prone links.  However, the underlying Monte Carlo engine can
+be used to approximately count models of DNF, \emph{but not CNF},
+formulas.
+
+The counting problems for both CNF and DNF formulae are
+{\sharpP}-complete. While the DNF representation suits some
+applications, most modern applications of model counting (e.g.
+probabilistic inference) use the CNF representation.  Although
+\emph{exact} counting for DNF and CNF formulae are polynomially
+inter-reducible, there is no known polynomial reduction for the
+corresponding \emph{approximate} counting problems.  In fact, Karp and
+Luby remark in~\cite{KarpLuby1989}  that it is highly unlikely that their
+randomized approximate algorithm for DNF formulae can be adapted to
+work for CNF formulae.  Thus, there has been no prior implementation
+of $(\varepsilon, \delta)$ counters for CNF formulae \emph{that scales in
+practice}.  In this paper, we present the first such counter. As in
+\cite{Jerr}, our algorithm runs in random polynomial time using an
+oracle for {\SAT}. Our extensive experiments show that our algorithm
+scales, with low error, to formulae arising from several application domains involving tens of thousands of
+variables.
+
+The organization of the paper is as follows. We present preliminary
+material in Section \ref{sec:prelims}, and related work in Section
+\ref{sec:relatedwork}. In Section \ref{sec:algo}, we present our
+algorithm, followed by its analysis in Section \ref{sec:analysis}.
+Section \ref{sec:experiment} discusses our experimental methodology,
+followed by experimental results in Section \ref{sec:results}. Finally, we conclude in Section \ref{sec:discussion}.
